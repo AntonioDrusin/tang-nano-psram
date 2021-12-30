@@ -1,0 +1,22 @@
+//Copyright (C)2014-2021 Gowin Semiconductor Corporation.
+//All rights reserved. 
+//File Title: Physical Constraints file
+//GOWIN Version: 1.9.8
+//Part Number: GW1N-LV1QN48C6/I5
+//Device: GW1N-1
+//Created Time: Wed 12 29 12:09:40 2021
+
+IO_LOC "mem_clk" 20;
+IO_PORT "mem_clk" PULL_MODE=UP DRIVE=8;
+IO_LOC "mem_ce_n" 19;
+IO_PORT "mem_ce_n" PULL_MODE=UP DRIVE=8;
+IO_LOC "mem_sio[3]" 21;
+IO_PORT "mem_sio[3]" PULL_MODE=UP DRIVE=8;
+IO_LOC "mem_sio[2]" 24;
+IO_PORT "mem_sio[2]" PULL_MODE=UP DRIVE=8;
+IO_LOC "mem_sio[1]" 23;
+IO_PORT "mem_sio[1]" PULL_MODE=UP DRIVE=8;
+IO_LOC "mem_sio[0]" 22;
+IO_PORT "mem_sio[0]" PULL_MODE=UP DRIVE=8;
+IO_LOC "button0" 14;
+IO_PORT "button0" PULL_MODE=UP;
