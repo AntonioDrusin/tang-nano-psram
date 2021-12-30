@@ -2,6 +2,9 @@
 // Maximum tCEM low is 8us, so at 120MHz you cannot read more than 120x8 960 - 8(command) - 6 wait - 6 address = 938 nibbles
 // The module will hold ready low for an extra 2 clock cycles to respect tCPH of 18ns (CE# high between subsequent burst operations), this can be optimized out if the clock is low.
 
+// define QPI to use the shorter command sequence.
+`define QPI
+
 module memory (
   input button0,
   input clk,
@@ -89,8 +92,13 @@ module memory (
           STEP_RST: begin
             command <= mem_driver.CMD_CMD;
             mem_command <= mem_driver.PS_CMD_RST;
+`ifdef QPI
             step <= STEP_SPI2QPI;
+`else
+            step <= STEP_IDLE;
+`endif
           end      
+`ifdef QPI
           STEP_SPI2QPI: begin
             // Switch to QPI commands, this saves 6 clocks per read/write     
             // But if you do not need the speed, should not use QPI at all for the Tang Nano
@@ -99,6 +107,7 @@ module memory (
             mem_command <= mem_driver.PS_CMD_QPI;
             step <= STEP_IDLE;            
           end
+`endif
           STEP_IDLE: begin
             initialized <= 1;            
             command <= 0; 
@@ -134,14 +143,14 @@ module mem_driver(
   localparam [7:0] PS_CMD_RST   = 8'h99;
   localparam [7:0] PS_CMD_QPI   = 8'h35;
   
-  localparam [7:0] STEP_IDLE    = 0;
-  localparam [7:0] STEP_SPI_CMD = 1;
-  localparam [7:0] STEP_QPI_CMD = 2; 
-  localparam [7:0] STEP_ADDR    = 3; 
-  localparam [7:0] STEP_WAIT    = 4; 
-  localparam [7:0] STEP_READ    = 5; 
-  localparam [7:0] STEP_WRITE   = 6; 
-  localparam [7:0] STEP_BRSTDLY = 7; 
+  localparam [2:0] STEP_IDLE    = 0;
+  localparam [2:0] STEP_SPI_CMD = 1;
+  localparam [2:0] STEP_QPI_CMD = 2; 
+  localparam [2:0] STEP_ADDR    = 3; 
+  localparam [2:0] STEP_WAIT    = 4; 
+  localparam [2:0] STEP_READ    = 5; 
+  localparam [2:0] STEP_WRITE   = 6; 
+  localparam [2:0] STEP_BRSTDLY = 7; 
 
   reg [7:0] rout;
   reg [4:0] counter;
@@ -169,12 +178,20 @@ module mem_driver(
         case ( excommand ) 
           CMD_READ: begin 
             rout <= PS_CMD_READ;
+`ifdef QPI
             step <= STEP_QPI_CMD; // Reads and writes are always sent in QPI mode.
+`else
+            step <= STEP_SPI_CMD; 
+`endif
             mem_addr <= addr;
           end
           CMD_WRITE: begin    
             rout <= PS_CMD_WRITE;
-            step <= STEP_QPI_CMD;
+`ifdef QPI
+            step <= STEP_QPI_CMD; 
+`else
+            step <= STEP_SPI_CMD; 
+`endif
             mem_addr <= addr;
             data <= data_in;
           end
@@ -192,9 +209,19 @@ module mem_driver(
         mem_ce_n <= 0;
         {sio[0], rout[7:1]} <= rout;
         sio[3:1] <= 3'bzzz;
-        if ( counter == 7 ) 
+        if ( counter == 7 )
+`ifdef QPI
           done <= 1;
+`else
+          if ( excommand == CMD_READ || excommand == CMD_WRITE ) begin
+            next_step = 1;          
+            step <= STEP_ADDR;      
+          end
+          else
+            done <= 1;
+`endif
       end
+`ifdef QPI
       STEP_QPI_CMD: begin  // Only read and write are QPI        
         mem_ce_n <= 0;
         sio <= counter == 0 ? rout[7:4] : rout[3:0];
@@ -203,6 +230,7 @@ module mem_driver(
           step <= STEP_ADDR;                     
         end
       end
+`endif
       STEP_ADDR: begin
         {sio, mem_addr[23:4]} <= mem_addr;        
         if ( counter == 5 ) begin

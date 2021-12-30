@@ -7,7 +7,7 @@ After programming the FPGA, you can use the oscilloscope to verify the functiona
 There are relatively few resources on the fpga (it's a nano after all). So my thoughts on that are:
  - Do not use more address lines than you need to
  - Transfer data to the BSRAM instead of a register and allow it to change its width by using one of the dual port versions of it. This requires the modification of the memory_driver module.
- - Remove the code that switches to QPI and use the STEP_SPI_CMD for CMD_READ and CMD_WRITE. The performance does not change that much, and the # of resources saved can be significant.
+ - Remove the code that switches to QPI. Performance does not change that much, and it saves a few resources. I added a macro QPI to enable QPI mode.
 
  2 byte read with QPI 18 clocks + cooldown
  2 byte read with SPI 24 clocks + cooldown
