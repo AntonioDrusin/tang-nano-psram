@@ -2,7 +2,7 @@
 <GAO_CONFIG>
     <Version>3.0</Version>
     <Mode>Standard</Mode>
-    <AoCore index="0" sample_clock="clk" trig_type="0" storage_depth="512" window_num="1" capture_amount="512" trigger_pos="0">
+    <AoCore index="0" sample_clock="memory/clk" trig_type="1" storage_depth="512" window_num="1" capture_amount="256" trigger_pos="0">
         <SignalList>
             <Bus name="read[15:0]">
                 <Signal>read[15]</Signal>
@@ -22,12 +22,11 @@
                 <Signal>read[1]</Signal>
                 <Signal>read[0]</Signal>
             </Bus>
-            <Signal>mem_ready</Signal>
         </SignalList>
         <Triggers>
             <Trigger index="0">
                 <SignalList>
-                    <Signal>button0</Signal>
+                    <Signal>error</Signal>
                 </SignalList>
             </Trigger>
             <Trigger index="1"/>
@@ -47,8 +46,8 @@
             <Trigger index="15"/>
         </Triggers>
         <MatchUnits>
-            <MatchUnit index="0" enabled="1" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="0" value1="0" trigger="0"/>
-            <MatchUnit index="1" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="0" enabled="1" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="1" value1="0" trigger="0"/>
+            <MatchUnit index="1" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="1" value1="0" trigger="1"/>
             <MatchUnit index="2" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
             <MatchUnit index="3" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
             <MatchUnit index="4" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
@@ -68,5 +67,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>1100111011110101</GAO_ID>
+    <GAO_ID>1110101010010011</GAO_ID>
 </GAO_CONFIG>

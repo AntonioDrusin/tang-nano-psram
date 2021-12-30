@@ -4,8 +4,14 @@
 //GOWIN Version: 1.9.8
 //Part Number: GW1N-LV1QN48C6/I5
 //Device: GW1N-1
-//Created Time: Wed 12 29 12:09:40 2021
+//Created Time: Thu 12 30 08:11:23 2021
 
+IO_LOC "led_b" 17;
+IO_PORT "led_b" PULL_MODE=UP DRIVE=8;
+IO_LOC "led_r" 18;
+IO_PORT "led_r" PULL_MODE=UP DRIVE=8;
+IO_LOC "led_g" 16;
+IO_PORT "led_g" PULL_MODE=UP DRIVE=8;
 IO_LOC "mem_clk" 20;
 IO_PORT "mem_clk" PULL_MODE=UP DRIVE=8;
 IO_LOC "mem_ce_n" 19;

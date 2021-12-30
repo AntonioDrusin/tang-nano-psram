@@ -42,7 +42,12 @@ module memory (
   reg ready;
   wire mem_ready;
   reg initialized = 0;  
- 
+
+//  reg clk;
+//  always_ff @(posedge fast_clk) begin
+//    clk <= ~clk;
+//  end
+//  assign clk = fast_clk;
   assign mem_clk = ~clk;
 
   mem_driver mem_driver(
@@ -256,12 +261,11 @@ module mem_driver(
           step <= STEP_BRSTDLY;
         end
       end
-      STEP_READ: begin
-        if ( counter == 1 )
-          reading <= 1;
+      STEP_READ: begin        
+        reading <= 1;
         if ( counter == 4 ) 
+        begin
           mem_ce_n <= 1;
-        if ( counter == 5 ) begin
           reading <= 0;
           next_step = 1;
           step <= STEP_BRSTDLY;      

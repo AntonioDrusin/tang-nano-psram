@@ -3,12 +3,15 @@ module top (
   // These are connected to the mem chip. Pinout is for Sipeed TANG Nano
   inout wire [3:0] mem_sio,   // sio[0] pin 22, sio[1] pin 23, sio[2] pin 24, sio[3] pin 21
   output wire mem_ce_n,       // pin 19
-  output wire mem_clk         // pin 20
+  output wire mem_clk,         // pin 20
+  output reg led_g,
+  output reg led_r,
+  output reg led_b
 );
 
   wire clk;
   wire mem_ready;
-  reg [1:0] addr = 24'd0;
+  reg [7:0] addr = 8'd0;
   reg read_strb;
   reg write_strb;
   wire [15:0] data_out;
@@ -23,7 +26,7 @@ module top (
     clk,
     mem_ready,
 
-    {{22{1'b0}},addr},
+    {{16{1'b0}},addr},
     read_strb,
     data_out,
     write_strb,
@@ -47,33 +50,51 @@ module top (
   reg [15:0] counter;
   reg [15:0] read;
   reg [3:0] step;
+  reg error;
+
+  
+  always_comb begin 
+      led_r <= ~(error && go);
+      led_g <= ~(~error && go);
+      led_b <= go;
+  end
+  
+
+  reg [7:0] debouncec = 0;
+  reg go = 0;
+  always @(posedge clk) begin
+    debouncec <= button0 ? 8'd0 : debouncec + 8'd1;
+    if ( debouncec[7] ) go <= 1;
+  end
+
 
   always @(posedge clk) begin    
-    if ( mem_ready ) 
+    if ( mem_ready && go) 
       case (step)
         WRITEA: begin   
-          addr <= 2'h2;
-          data_in <= 16'habcd;
+          addr <= 8'h0;
+          data_in <= 16'h1234;
           write_strb <= 1;
           read_strb <= 0;
           step <= WRITEB;
         end
         WRITEB: begin   
-          addr <= 2'h0;
-          data_in <= 16'h1234;
+          addr <= 8'h2;
+          data_in <= 16'h5678;
           write_strb <= 1;
           read_strb <= 0;
           step <= READA;
         end
         READA: begin
-          addr <= 2'h2;
+          addr <= 8'h0;
           write_strb <= 0;
           read_strb <= 1;
           step <= READB;
         end
         READB: begin
           read <= data_out;
-          addr <= 2'h0;
+          if ( data_out != 16'h1234 ) error <= 1;
+          addr <= 8'h1;
           write_strb <= 0;
           read_strb <= 1;
           step <= NEXT;
@@ -82,6 +103,7 @@ module top (
           write_strb <= 0;
           read_strb <= 0;
           read <= data_out;
+          if ( data_out != 16'h3456 ) error <= 1;
           counter <= counter + 1'd1;
           step <= WRITEA;
         end        
