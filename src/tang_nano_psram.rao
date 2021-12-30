@@ -4,23 +4,11 @@
     <Mode>Standard</Mode>
     <AoCore index="0" sample_clock="memory/clk" trig_type="1" storage_depth="512" window_num="1" capture_amount="256" trigger_pos="0">
         <SignalList>
-            <Bus name="read[15:0]">
-                <Signal>read[15]</Signal>
-                <Signal>read[14]</Signal>
-                <Signal>read[13]</Signal>
-                <Signal>read[12]</Signal>
-                <Signal>read[11]</Signal>
-                <Signal>read[10]</Signal>
-                <Signal>read[9]</Signal>
-                <Signal>read[8]</Signal>
-                <Signal>read[7]</Signal>
-                <Signal>read[6]</Signal>
-                <Signal>read[5]</Signal>
-                <Signal>read[4]</Signal>
-                <Signal>read[3]</Signal>
-                <Signal>read[2]</Signal>
-                <Signal>read[1]</Signal>
-                <Signal>read[0]</Signal>
+            <Bus name="memory/mem_sio[3:0]">
+                <Signal>memory/mem_sio[3]</Signal>
+                <Signal>memory/mem_sio[2]</Signal>
+                <Signal>memory/mem_sio[1]</Signal>
+                <Signal>memory/mem_sio[0]</Signal>
             </Bus>
         </SignalList>
         <Triggers>
@@ -67,5 +55,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>1110101010010011</GAO_ID>
+    <GAO_ID>0001110010010110</GAO_ID>
 </GAO_CONFIG>

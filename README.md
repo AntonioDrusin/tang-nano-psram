@@ -4,13 +4,7 @@ First, pardon the mess. This is my first project in verilog. I tested this code 
 
 After programming the FPGA, you can use the oscilloscope to verify the functionality. Pressing the button to the left of the USB connector will trigger the oscilloscope once it is armed.
 
-There are relatively few resources on the fpga (it's a nano after all). So my thoughts on that are:
- - Do not use more address lines than you need to
- - Transfer data to the BSRAM instead of a register and allow it to change its width by using one of the dual port versions of it. This requires the modification of the memory_driver module.
- - Remove the code that switches to QPI. Performance does not change that much, and it saves a few resources. I added a macro QPI to enable QPI mode.
-
- 2 byte read with QPI 18 clocks + cooldown
- 2 byte read with SPI 24 clocks + cooldown
+I was only able to make it work with a clock divider of 8. But I am working on it.
 
 Transfering
 

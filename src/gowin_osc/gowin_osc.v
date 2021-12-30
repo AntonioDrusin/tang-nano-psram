@@ -14,6 +14,6 @@ OSCH osc_inst (
     .OSCOUT(oscout)
 );
 
-defparam osc_inst.FREQ_DIV = 4;
+defparam osc_inst.FREQ_DIV = 8;
 
 endmodule //Gowin_OSC
