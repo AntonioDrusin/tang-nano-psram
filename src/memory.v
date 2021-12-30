@@ -18,7 +18,7 @@ module memory (
   input[15:0] data_in,
 
   // configuration
-  input [15:0] mem_150us_clock_count, // The min number of mem_clk to reach a 150us delay.
+  input [7:0] mem_150us_clock_count, // The min number of mem_clk to reach a 150us delay.
 
   // These are connected to the mem chip. Pinout is for Sipeed TANG Nano
   inout wire [3:0] mem_sio,   // sio[0] pin 22, sio[1] pin 23, sio[2] pin 24, sio[3] pin 21
@@ -77,7 +77,7 @@ module memory (
           STEP_DELAY: begin 
             // datasheet requires a 150us delay before sending the reset upon power up            
             counter <= counter + 1'd1;
-            if ( counter == mem_150us_clock_count ) begin
+            if ( counter[15:8] == mem_150us_clock_count ) begin
               step <= STEP_RSTEN;
             end
           end

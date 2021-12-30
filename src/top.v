@@ -8,7 +8,7 @@ module top (
 
   wire clk;
   wire mem_ready;
-  reg [23:0] addr = 24'd0;
+  reg [1:0] addr = 24'd0;
   reg read_strb;
   reg write_strb;
   wire [15:0] data_out;
@@ -23,13 +23,13 @@ module top (
     clk,
     mem_ready,
 
-    addr,
+    {{22{1'b0}},addr},
     read_strb,
     data_out,
     write_strb,
     data_in,
 
-    16'd18000, // 18000 clocks at 120MHz is about 150us that we need to wait for the chip.
+    8'h47, // 71 * 256 clocks at 120MHz is about 150us that we need to wait for the chip.
     
     mem_sio,
     mem_ce_n,
@@ -52,28 +52,28 @@ module top (
     if ( mem_ready ) 
       case (step)
         WRITEA: begin   
-          addr <= 24'h000002;
+          addr <= 2'h2;
           data_in <= 16'habcd;
           write_strb <= 1;
           read_strb <= 0;
           step <= WRITEB;
         end
         WRITEB: begin   
-          addr <= 24'h000000;
+          addr <= 2'h0;
           data_in <= 16'h1234;
           write_strb <= 1;
           read_strb <= 0;
           step <= READA;
         end
         READA: begin
-          addr <= 24'h000002;
+          addr <= 2'h2;
           write_strb <= 0;
           read_strb <= 1;
           step <= READB;
         end
         READB: begin
           read <= data_out;
-          addr <= 24'h000000;
+          addr <= 2'h0;
           write_strb <= 0;
           read_strb <= 1;
           step <= NEXT;
