@@ -4,7 +4,7 @@ First, pardon the mess. This is my first project in verilog. I tested this code 
 
 After programming the FPGA, you can use the oscilloscope to verify the functionality. Pressing the button to the left of the USB connector will trigger the oscilloscope once it is armed.
 
-I was only able to make it work with a clock divider of 8. But I am working on it.
+I was only able to make it work up to 60MHz.
 
 Transfering
 
