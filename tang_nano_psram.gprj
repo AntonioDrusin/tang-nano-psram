@@ -7,6 +7,7 @@
     <FileList>
         <File path="src/gowin_osc/gowin_osc.v" type="file.verilog" enable="1"/>
         <File path="src/memory.v" type="file.verilog" enable="1"/>
+        <File path="src/old_mem_driver.v" type="file.verilog" enable="1"/>
         <File path="src/top.v" type="file.verilog" enable="1"/>
         <File path="src/tang_nano_psram.cst" type="file.cst" enable="1"/>
         <File path="src/tang_nano_psram.rao" type="file.gao" enable="0"/>
